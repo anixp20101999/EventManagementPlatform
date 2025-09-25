@@ -29,20 +29,23 @@
 		D358921C2E85768500397BE9 /* EventManagementPlatformUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventManagementPlatformUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A43794782E85BEAF00B5425B /* Exceptions for "EventManagementPlatform" folder in "EventManagementPlatform" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D35892012E85768300397BE9 /* EventManagementPlatform */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D35892042E85768400397BE9 /* EventManagementPlatform */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A43794782E85BEAF00B5425B /* Exceptions for "EventManagementPlatform" folder in "EventManagementPlatform" target */,
+			);
 			path = EventManagementPlatform;
-			sourceTree = "<group>";
-		};
-		D35892152E85768500397BE9 /* EventManagementPlatformTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = EventManagementPlatformTests;
-			sourceTree = "<group>";
-		};
-		D358921F2E85768500397BE9 /* EventManagementPlatformUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = EventManagementPlatformUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -76,8 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				D35892042E85768400397BE9 /* EventManagementPlatform */,
-				D35892152E85768500397BE9 /* EventManagementPlatformTests */,
-				D358921F2E85768500397BE9 /* EventManagementPlatformUITests */,
 				D35892032E85768400397BE9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +131,6 @@
 			dependencies = (
 				D35892142E85768500397BE9 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				D35892152E85768500397BE9 /* EventManagementPlatformTests */,
-			);
 			name = EventManagementPlatformTests;
 			packageProductDependencies = (
 			);
@@ -152,9 +150,6 @@
 			);
 			dependencies = (
 				D358921E2E85768500397BE9 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D358921F2E85768500397BE9 /* EventManagementPlatformUITests */,
 			);
 			name = EventManagementPlatformUITests;
 			packageProductDependencies = (
@@ -399,6 +394,7 @@
 				DEVELOPMENT_TEAM = G7PF54SYD2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EventManagementPlatform/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -428,6 +424,7 @@
 				DEVELOPMENT_TEAM = G7PF54SYD2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EventManagementPlatform/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
