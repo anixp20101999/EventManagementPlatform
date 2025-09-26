@@ -16,8 +16,8 @@ struct MapLocation: Identifiable {
 
 struct EventMapScreen: View {
     @ObservedObject var viewModel: DiscoverEventsViewModel
-    
-    @State var selectedIndex = 0 // Track the selected event
+    @State var selectedIndex = 0
+    let colors: [Color] = [.red, .green, .blue, .orange, .pink, .purple, .yellow]
     
     var body: some View {
         // Default region based on the first event
@@ -37,38 +37,66 @@ struct EventMapScreen: View {
         }
         .padding(.top,20)
         
-        ZStack {
+        ZStack{
             // Map with dynamic region based on selected event
             Map(coordinateRegion: .constant(region),
                 interactionModes: .all,
                 annotationItems: viewModel.items?.data.results.map { event in
-                    MapLocation(coordinate: CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude))
-                } ?? []) { location in
+                MapLocation(coordinate: CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude))
+            } ?? []) { location in
                 MapAnnotation(coordinate: location.coordinate) {
                     VStack {
                         Image(systemName: "mappin.and.ellipse")
                             .resizable()
                             .frame(width: 20, height: 30)
                             .foregroundColor(.black)
-                        Text(viewModel.items?.data.results[selectedIndex].eventName ?? "Event") // Show event name
-                            .font(.caption)
-                            .foregroundColor(.black)
                     }
                 }
             }
-//            .frame(height: 400)
+            
             TabView(selection: $selectedIndex) {
-                ForEach(0..<(viewModel.items?.data.results.count ?? 0) , id: \.self) { index in
-                    VStack {
-                        Image(systemName: "balloon")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                        Text(viewModel.items?.data.results[index].eventName ?? "Event")
+                ForEach(Array(viewModel.items?.data.results.enumerated() ?? [].enumerated()), id:\.offset) { index,event in
+                    HStack {
+                        AsyncImage(url: URL(string: "\(event.eventImageURL)?tr=w-800,h-450,c-force")) { phase in
+                            if let image = phase.image {
+                                image.resizable()
+                                    .frame(width: 90, height: 90)
+                                    .clipShape(RoundedCorner(radius: 15, corners: [.topLeft, .bottomLeft]))
+                            } else {
+                                Color.gray
+                                    .frame(width: 90, height: 90)
+                                    .clipShape(RoundedCorner(radius: 15, corners: [.topLeft, .bottomLeft]))
+                            }
+                        }
+                        
+                        HStack {
+                            VStack(alignment:.leading){
+                                DescriptionText(title: event.eventName)
+                                BodyText(title: formatDate(from: event.eventDate), color: .gray)
+                            }
+                            Spacer()
+                            NavigationLink(destination: EventDetailsScreen(eventId:event.eventID)){
+                                BodyText(title: "View Details")
+                                    .padding(.all, 10)
+                                    .frame(height: 35)
+                                    .background(.blue.opacity(0.3))
+                                    .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                            }
+                            
+                        }
+                    }
+                    .padding(.trailing, 10)
+                    .background {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(.white)
+                            .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                     }
                     .tag(index)
                 }
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)) // Hides page index dots
+            .offset(y:250)
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
         .navigationBarBackButtonHidden(true)
     }

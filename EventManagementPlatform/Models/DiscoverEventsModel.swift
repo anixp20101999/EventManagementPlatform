@@ -38,3 +38,29 @@ struct Result: Codable {
         case ticketPrice = "ticket_price"
     }
 }
+
+
+
+
+
+// MARK: - EventCategoriesModel
+struct EventCategoriesModel: Codable {
+    let status, message: String
+    let data: Events
+}
+
+// MARK: - DataClass
+struct Events: Codable {
+    let count: Int
+    let results: [ResultCategories]
+}
+
+// MARK: - Result
+struct ResultCategories: Codable {
+    let eventCategoryID, eventCategory: String
+
+    enum CodingKeys: String, CodingKey {
+        case eventCategoryID = "event_category_id"
+        case eventCategory = "event_category"
+    }
+}

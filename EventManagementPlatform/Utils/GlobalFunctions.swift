@@ -50,6 +50,20 @@ struct Loader: View {
         VStack {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: tint ?? .black))
-//                .foregroundColor(tint ?? .black)
                 .frame(width: width ?? 100 , height: height ?? 100)
         }}}
+
+
+struct RoundedCorner: Shape {
+    var radius: CGFloat = 20
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
+    }
+}
