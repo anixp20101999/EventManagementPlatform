@@ -5,7 +5,7 @@ struct TitleText : View {
     var color: Color?
     var body: some View {
         Text(title)
-            .font(.system(size:20))
+            .font(.system(size:18))
             .foregroundStyle(color ?? .black)
 
     }
@@ -19,6 +19,7 @@ struct DescriptionText : View {
             .font(.system(size:14))
             .foregroundStyle(color ?? .black)
             .fontWeight(.bold)
+            .multilineTextAlignment(.leading)
 
     }
 }

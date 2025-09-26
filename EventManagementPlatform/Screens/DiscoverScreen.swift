@@ -76,7 +76,7 @@ struct ResultsView: View {
                         TitleText(title: "No Results Found !!")
                     } else {
                         ForEach(viewModel.visible, id: \.eventID) { event in
-                            NavigationLink(destination: EventDetailsScreen()) {
+                            NavigationLink(destination: EventDetailsScreen(eventId:event.eventID)) {
                                 HStack(spacing: 10) {
                                     AsyncImage(url: URL(string: "\(event.eventImageURL)?tr=w-800,h-450,c-force")) { phase in
                                         if let image = phase.image {
@@ -91,7 +91,7 @@ struct ResultsView: View {
                                     }
                                     HStack {
                                         VStack {
-                                            HStack {
+                                            HStack{
                                                 DescriptionText(title: event.eventName)
                                                 Spacer()
                                                 CategoryText(title: event.eventCategory)
