@@ -1,5 +1,5 @@
 import Foundation
-
+import Combine
 
 enum State {
     case loading
@@ -12,6 +12,8 @@ class DiscoverEventsViewModel : ObservableObject {
     @Published var items : DiscoverEventsModel?
     @Published var state : State = State.loading
     @Published var searchedText : String = ""
+    @Published var filteredData : [Result] = []
+    @Published  var debounceCancellable: AnyCancellable?
     
     func fetchItems() async throws {
         

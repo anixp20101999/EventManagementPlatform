@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 func reusableDateDecoder(decoder:JSONDecoder){
     
@@ -26,3 +27,29 @@ func reusableDateDecoder(decoder:JSONDecoder){
     })
     
 }
+
+func formatDate(from isoString: String) -> String {
+    let isoFormatter = ISO8601DateFormatter()
+    isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    
+    // Parse ISO string to Date
+    guard let date = isoFormatter.date(from: isoString) else { return isoString }
+    
+    // Format to "MMM d, yyyy"
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MMM d, yyyy"
+    return formatter.string(from: date)
+}
+
+struct Loader: View {
+    var width : CGFloat?
+    var height : CGFloat?
+    var tint: Color?
+
+    var body: some View {
+        VStack {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: tint ?? .black))
+//                .foregroundColor(tint ?? .black)
+                .frame(width: width ?? 100 , height: height ?? 100)
+        }}}
