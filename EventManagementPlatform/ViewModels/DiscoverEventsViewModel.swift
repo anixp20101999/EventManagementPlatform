@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-enum State {
+enum State1 {
     case loading
     case ui
     case error
@@ -10,7 +10,7 @@ enum State {
 @MainActor
 class DiscoverEventsViewModel : ObservableObject {
     @Published var items : DiscoverEventsModel?
-    @Published var state : State = State.loading
+    @Published var state : State1 = State1.loading
     @Published var searchedText : String = ""
     @Published private(set) var filteredAll: [Result] = []   // full filtered set
     @Published private(set) var visible: [Result] = []        // what UI shows (paged)

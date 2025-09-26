@@ -4,7 +4,7 @@ import Combine
 @MainActor
 class EventDetailsViewModel : ObservableObject {
     @Published var items : EventDetailsModel?
-    @Published var state : State = State.loading
+    @Published var state : State1 = State1.loading
     
     func fetchItems(id:String) async throws {
         

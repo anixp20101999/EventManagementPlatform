@@ -34,9 +34,12 @@ struct HeaderView: View {
     var body: some View {
         ZStack{
             TitleText(title:"Discover")
-            Image(systemName:"map")
-                .foregroundStyle(.blue)
-                .frame(maxWidth:.infinity,alignment:.trailing)
+            NavigationLink(destination: EventMapScreen(viewModel:viewModel)) {
+                Image(systemName:"map")
+                    .foregroundStyle(.blue)
+                    .frame(maxWidth:.infinity,alignment:.trailing)
+            }
+            
         }
     }
 }
