@@ -14,11 +14,13 @@ struct DiscoverScreen: View {
             .onAppear{
                 Task{
                     try await viewModel.fetchItems()
+                    try await viewModel.fetchCategoryItems()
                 }
             }
             .refreshable {
                 Task{
                     try await viewModel.fetchItems()
+                    try await viewModel.fetchCategoryItems()
                 }
             }
             .onTapGesture {
@@ -34,9 +36,12 @@ struct HeaderView: View {
     var body: some View {
         ZStack{
             TitleText(title:"Discover")
-            Image(systemName:"map")
-                .foregroundStyle(.blue)
-                .frame(maxWidth:.infinity,alignment:.trailing)
+            NavigationLink(destination: EventMapScreen(viewModel:viewModel)) {
+                Image(systemName:"map")
+                    .foregroundStyle(.blue)
+                    .frame(maxWidth:.infinity,alignment:.trailing)
+            }
+            
         }
     }
 }
@@ -49,7 +54,7 @@ struct SearchBar: View {
             TextField("Search", text: $viewModel.searchedText)
                 .disableAutocorrection(true)
                 .onChange(of: viewModel.searchedText) { _, text in
-                    viewModel.updateSearch(text)
+                    viewModel.applyFilter()
                 }
         }
         .frame(maxWidth:.infinity,alignment: .leading)
@@ -72,9 +77,49 @@ struct ResultsView: View {
         } else if viewModel.state == .ui {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 20) {
+                    ZStack{
+                        Menu {
+                            ForEach(viewModel.categoryItems?.data.results ?? [], id: \.eventCategoryID) { category in
+                                Button(category.eventCategory) {
+                                    viewModel.selectedCategory = category.eventCategory
+                                    viewModel.applyFilter()
+                                }
+                            }
+                        } label: {
+                            
+                            HStack{
+                                Text(viewModel.selectedCategory ?? "Categories")
+                                    .foregroundStyle(.black)
+                                Image(systemName:"chevron.down")
+                                    .foregroundStyle(.black)
+                            }
+                            
+                        }
+                        Image(systemName:"xmark")
+                            .onTapGesture {
+                                viewModel.selectedCategory = nil
+                                viewModel.applyFilter()
+                            }
+                            .foregroundStyle(.black)
+                            .frame(maxWidth:.infinity,alignment:.trailing)
+                        
+                    }
+                    
+                    Picker("Filter", selection: $viewModel.filterType) {
+                        ForEach(FilterType.allCases) { type in
+                            Text(type.rawValue).tag(type)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: viewModel.filterType) { _, _ in
+                        viewModel.applyFilter()
+                    }
+
+                    
                     if viewModel.visible.isEmpty {
                         TitleText(title: "No Results Found !!")
                     } else {
+                        
                         ForEach(viewModel.visible, id: \.eventID) { event in
                             NavigationLink(destination: EventDetailsScreen(eventId:event.eventID)) {
                                 HStack(spacing: 10) {
@@ -130,20 +175,5 @@ struct ResultsView: View {
         } else {
             Spacer(); TitleText(title: "No Results Found !!"); Spacer()
         }
-    }
-}
-
-
-struct RoundedCorner: Shape {
-    var radius: CGFloat = 20
-    var corners: UIRectCorner = .allCorners
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
     }
 }
