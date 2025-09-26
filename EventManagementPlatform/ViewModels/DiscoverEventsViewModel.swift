@@ -12,8 +12,13 @@ class DiscoverEventsViewModel : ObservableObject {
     @Published var items : DiscoverEventsModel?
     @Published var state : State = State.loading
     @Published var searchedText : String = ""
-    @Published var filteredData : [Result] = []
-    @Published  var debounceCancellable: AnyCancellable?
+    @Published private(set) var filteredAll: [Result] = []   // full filtered set
+    @Published private(set) var visible: [Result] = []        // what UI shows (paged)
+    private let pageSize = 10
+    private var isLoadingMore = false
+    private var all: [Result] { items?.data.results ?? [] }
+    
+    
     
     func fetchItems() async throws {
         
@@ -37,6 +42,7 @@ class DiscoverEventsViewModel : ObservableObject {
                     self.items = items
                     self.state = .ui
                     print("items \(items)")
+                    applyInitialData()
                 }
                 else {
                     self.state = .error
@@ -49,6 +55,31 @@ class DiscoverEventsViewModel : ObservableObject {
             self.state = .error
             throw error
         }
+    }
+    
+    func applyInitialData() {
+        filteredAll = all
+        visible = Array(filteredAll.prefix(pageSize))
+    }
+
+    func updateSearch(_ text: String) {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        filteredAll = trimmed.isEmpty
+            ? all
+            : all.filter { $0.eventName.localizedCaseInsensitiveContains(trimmed) }
+        visible = Array(filteredAll.prefix(pageSize))
+    }
+
+    func loadMoreIfNeeded(currentItem: Result) {
+        guard let last = visible.last, last.eventID == currentItem.eventID else { return }
+        guard visible.count < filteredAll.count, !isLoadingMore else { return }
+
+        isLoadingMore = true
+        let nextEnd = min(visible.count + pageSize, filteredAll.count)
+        if visible.count < nextEnd {
+            visible.append(contentsOf: filteredAll[visible.count..<nextEnd])
+        }
+        isLoadingMore = false
     }
     
 }
